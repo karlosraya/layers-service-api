@@ -57,3 +57,32 @@ Route::group([
     });
 });
 
+
+Route::group([
+    'prefix' => 'production'
+], function () {
+    Route::group([
+      'middleware' => 'auth:api'
+    ], function() {
+        Route::get('', 'ProductionController@getProductionReportsOfActiveBatches');
+        Route::get('upto/{date}', 'ProductionController@getProductionReportsOfActiveBatchesUptoDate');
+        Route::get('{houseId}', 'ProductionController@getProductionReportsByHouseId');
+        Route::post('', 'ProductionController@createUpdateProductionReport');
+    });
+});
+
+
+Route::group([
+    'prefix' => 'feeds-delivery'
+], function () {
+    Route::group([
+      'middleware' => 'auth:api'
+    ], function() {
+        Route::get('{date}', 'FeedsDeliveryController@getFeedsDeliveryByDate');
+        Route::get('', 'FeedsDeliveryController@getFeedsDelivered');
+        Route::post('', 'FeedsDeliveryController@createUpdateFeedsDelivery');
+    });
+});
+
+
+
