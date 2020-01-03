@@ -32,3 +32,28 @@ Route::group([
     });
 });
 
+Route::group([
+    'prefix' => 'house'
+], function () {
+    Route::group([
+      'middleware' => 'auth:api'
+    ], function() {
+        Route::get('', 'HouseController@getHouses');
+        Route::post('', 'HouseController@createUpdateHouse');
+    });
+});
+
+Route::group([
+    'prefix' => 'batch'
+], function () {
+    Route::group([
+      'middleware' => 'auth:api'
+    ], function() {
+        Route::get('active/{id}', 'BatchController@getActiveByHouseId');
+        Route::put('{id}', 'BatchController@editBatch');
+        Route::post('start', 'BatchController@startBatch');
+        Route::put('end/{id}', 'BatchController@endBatch');
+        Route::get('archive/{houseId}', 'BatchController@getBatchesByHouseId');
+    });
+});
+
