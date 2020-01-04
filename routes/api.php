@@ -57,7 +57,6 @@ Route::group([
     });
 });
 
-
 Route::group([
     'prefix' => 'production'
 ], function () {
@@ -71,18 +70,54 @@ Route::group([
     });
 });
 
-
 Route::group([
-    'prefix' => 'feeds-delivery'
+    'prefix' => 'graded-eggs'
 ], function () {
     Route::group([
       'middleware' => 'auth:api'
     ], function() {
-        Route::get('{date}', 'FeedsDeliveryController@getFeedsDeliveryByDate');
-        Route::get('', 'FeedsDeliveryController@getFeedsDelivered');
-        Route::post('', 'FeedsDeliveryController@createUpdateFeedsDelivery');
+        Route::get('{date}', 'GradedEggsController@getGradedEggsByDate');
+        Route::get('available/{date}', 'GradedEggsController@getAvailableByDate');
+        Route::post('', 'GradedEggsController@createUpdateGradedEggs');
+    });
+});
+
+Route::group([
+    'prefix' => 'prices'
+], function () {
+    Route::group([
+      'middleware' => 'auth:api'
+    ], function() {
+        Route::get('', 'PricesController@getPrices');
+        Route::post('', 'PricesController@updatePrices');
+    });
+});
+
+Route::group([
+    'prefix' => 'customer'
+], function () {
+    Route::group([
+      'middleware' => 'auth:api'
+    ], function() {
+        Route::get('', 'CustomerController@getCustomers');
+        Route::post('', 'CustomerController@createUpdateCustomer');
+    });
+});
+
+Route::group([
+    'prefix' => 'invoices'
+], function () {
+    Route::group([
+      'middleware' => 'auth:api'
+    ], function() {
+        Route::get('/{date}', 'InvoiceController@getInvoicesByDate');
+        Route::get('{id}', 'InvoiceController@getInvoicesById');
+        Route::get('customer/{id}', 'InvoiceController@getInvoicesByCustomerId');
+        Route::post('', 'InvoiceController@createUpdateInvoice');
     });
 });
 
 
+    
 
+    
