@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -74,6 +75,6 @@ class AuthController extends Controller
     { 
         $users = DB::table('users')->get();
 
-        return response()->json($users, $this-> successStatus); 
+        return response()->json($users); 
     } 
 }

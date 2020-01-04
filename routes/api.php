@@ -29,6 +29,7 @@ Route::group([
     ], function() {
         Route::get('logout', 'AuthController@logout');
         Route::get('', 'AuthController@user');
+        Route::get('list', 'AuthController@getUsers');
     });
 });
 
