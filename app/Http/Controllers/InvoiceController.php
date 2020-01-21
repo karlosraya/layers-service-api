@@ -45,22 +45,10 @@ class InvoiceController extends Controller
 
     public function getInvoicesByCustomerId($id)
     {
-         if($date!= null) {
-            $invoices = DB::table('invoices')->where('customerId', '=', $id)
-                                             ->select('invoices.*')->get();
+        $invoices = DB::table('invoices')->where('customerId', '=', $id)
+                                         ->select('invoices.*')->get();
 
-            foreach ($invoices as $key => $invoice) {
-                $items = Item::where('invoiceId', $invoice->id)->get();
-               
-                if($invoice != null) {
-                    $invoice->items = $items;
-                }
-            }
-
-            return response()->json($invoices);
-        } else {
-            abort(500, 'No date found from the request!');
-        }
+        return response()->json($invoices);
     }
 
     public function createUpdateInvoice(Request $request)

@@ -72,6 +72,18 @@ Route::group([
 });
 
 Route::group([
+    'prefix' => 'feeds-delivery'
+], function () {
+    Route::group([
+      'middleware' => 'auth:api'
+    ], function() {
+        Route::get('{date}', 'FeedsDeliveryController@getFeedsDeliveryByDate');
+        Route::get('', 'FeedsDeliveryController@getFeedsDelivered');
+        Route::post('', 'FeedsDeliveryController@createUpdateFeedsDelivery');
+    });
+});
+
+Route::group([
     'prefix' => 'graded-eggs'
 ], function () {
     Route::group([
@@ -111,14 +123,22 @@ Route::group([
     Route::group([
       'middleware' => 'auth:api'
     ], function() {
-        Route::get('/{date}', 'InvoiceController@getInvoicesByDate');
+        Route::get('{date}', 'InvoiceController@getInvoicesByDate');
+    });
+});
+
+
+Route::group([
+    'prefix' => 'invoice'
+], function () {
+    Route::group([
+      'middleware' => 'auth:api'
+    ], function() {
         Route::get('{id}', 'InvoiceController@getInvoicesById');
         Route::get('customer/{id}', 'InvoiceController@getInvoicesByCustomerId');
         Route::post('', 'InvoiceController@createUpdateInvoice');
     });
 });
-
-
     
 
     

@@ -29,7 +29,11 @@ class ProductionController extends Controller
             $batch->productions = $productions; 
         }
 
-        return response()->json($batches, $this-> successStatus);
+        return response()->json($batches, $this-> successStatus)
+                         ->withHeaders([
+                            'Pragma' => "no-cache",
+                            'Cache-Control' => 'no-cache, must-revalidate, no-store, max-age=0, private'
+                            ]);
     }
 
     function getProductionReportsOfActiveBatchesUptoDate($date) {
@@ -65,7 +69,11 @@ class ProductionController extends Controller
             $batch->totals = $totals; 
         }
 
-        return response()->json($batches, $this-> successStatus);
+        return response()->json($batches, $this-> successStatus)
+                         ->withHeaders([
+                            'Pragma' => "no-cache",
+                            'Cache-Control' => 'no-cache, must-revalidate, no-store, max-age=0, private'
+                            ]);
     }
 
     function getProductionReportsByHouseId($houseId) {
@@ -86,7 +94,11 @@ class ProductionController extends Controller
 
             $batch->productions = $productions; 
 
-            return response()->json($batch, $this-> successStatus);
+            return response()->json($batch, $this-> successStatus)
+                             ->withHeaders([
+                                'Pragma' => "no-cache",
+                                'Cache-Control' => 'no-cache, must-revalidate, no-store, max-age=0, private'
+                                ]);
         } else {
             abort(500, 'No active batch found for houseId: '.$houseId);
         }
