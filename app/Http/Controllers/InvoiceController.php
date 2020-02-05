@@ -9,6 +9,7 @@ use App\Invoice;
 use App\Item;
 use App\Http\Requests;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class InvoiceController extends Controller
 {
@@ -29,12 +30,12 @@ class InvoiceController extends Controller
         }
     }
 
-    public function getInvoicesById($id)
+    public function getInvoiceById($id)
     {
         if($id!= null) {
             $invoice = Invoice::find($id);
 
-            $items = DB::table('items')->where('invoiceId', '=', $invoice->invoiceId)->get();
+            $items = DB::table('items')->where('invoiceId', '=', $invoice->id)->get();
             $invoice->items = $items;
 
             return response()->json($invoice);
@@ -43,16 +44,23 @@ class InvoiceController extends Controller
         }
     }
 
-    public function getInvoicesByCustomerId($id)
+    public function getInvoicesByCustomerIdAndDateRange(Request $request)
     {
-        $invoices = DB::table('invoices')->where('customerId', '=', $id)
-                                         ->select('invoices.*')->get();
+        $invoices = DB::table('invoices')
+                        ->where([
+                            ['customerId', '=', $request->customerId],
+                            ['invoiceDate', '>=', $request->startDate],
+                            ['invoiceDate', '<=', $request->endDate]
+                        ])
+                        ->get();
 
         return response()->json($invoices);
     }
 
     public function createUpdateInvoice(Request $request)
     {
+        $auth = Auth::user(); 
+
         if($request->id != null) {
             $invoice = Invoice::findOrFail($request->id);
         } else {
@@ -66,7 +74,7 @@ class InvoiceController extends Controller
         $invoice->discount = $request->discount;
         $invoice->total = $request->total;
         $invoice->amountPaid = $request->amountPaid;
-        $invoice->lastInsertUpdateBy = $request->input('lastInsertUpdateBy');
+        $invoice->lastInsertUpdateBy = $auth->firstName.' '.$auth->lastName;
         $invoice->lastInsertUpdateTS = Carbon::now();
         $invoice->save();
 
@@ -92,5 +100,13 @@ class InvoiceController extends Controller
         }
         
         return response()->json($invoice);
+    }
+
+    public function deleteInvoice($id) {
+
+        DB::table('invoices')->where('id', '=', $id)->delete();
+        DB::table('items')->where('invoiceId', '=', $id)->delete();
+
+        return response()->json(['success'=>true]);
     }
 }

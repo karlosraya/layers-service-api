@@ -22,14 +22,18 @@ Route::group([
     'prefix' => 'auth'
 ], function () {
     Route::post('login', 'AuthController@login');
-    Route::post('register', 'AuthController@signup');
   
     Route::group([
       'middleware' => 'auth:api'
     ], function() {
+        Route::post('register', 'AuthController@signup');
         Route::get('logout', 'AuthController@logout');
         Route::get('', 'AuthController@user');
         Route::get('list', 'AuthController@getUsers');
+        Route::post('update/{id}', 'AuthController@updateUser');
+        Route::post('reset-password/{id}', 'AuthController@resetPassword');
+        Route::get('disable/{id}', 'AuthController@disableUser');
+        Route::get('enable/{id}', 'AuthController@enableUser');
     });
 });
 
@@ -68,6 +72,8 @@ Route::group([
         Route::get('upto/{date}', 'ProductionController@getProductionReportsOfActiveBatchesUptoDate');
         Route::get('{houseId}', 'ProductionController@getProductionReportsByHouseId');
         Route::post('', 'ProductionController@createUpdateProductionReport');
+        Route::get('delete/{id}', 'ProductionController@deleteProductionReport');
+        Route::get('batch/{batchId}', 'ProductionController@getProductionReportsByBatchId');
     });
 });
 
@@ -78,7 +84,7 @@ Route::group([
       'middleware' => 'auth:api'
     ], function() {
         Route::get('{date}', 'FeedsDeliveryController@getFeedsDeliveryByDate');
-        Route::get('', 'FeedsDeliveryController@getFeedsDelivered');
+        Route::post('search', 'FeedsDeliveryController@getFeedsDeliveredByDateRange');
         Route::post('', 'FeedsDeliveryController@createUpdateFeedsDelivery');
     });
 });
@@ -134,9 +140,10 @@ Route::group([
     Route::group([
       'middleware' => 'auth:api'
     ], function() {
-        Route::get('{id}', 'InvoiceController@getInvoicesById');
-        Route::get('customer/{id}', 'InvoiceController@getInvoicesByCustomerId');
+        Route::get('{id}', 'InvoiceController@getInvoiceById');
+        Route::post('search', 'InvoiceController@getInvoicesByCustomerIdAndDateRange');
         Route::post('', 'InvoiceController@createUpdateInvoice');
+        Route::get('delete/{id}', 'InvoiceController@deleteInvoice');
     });
 });
     

@@ -35,10 +35,16 @@ class FeedsDeliveryController extends Controller
         }
     }
 
-    public function getFeedsDelivered()
+    public function getFeedsDeliveredByDateRange(Request $request)
     {
-        $feedsDelivery = FeedsDelivery::all();
-        return response()->json(FeedsDeliveryResource::collection($feedsDelivery));
+        $feedsDelivery = DB::table('feeds_deliveries')
+                            ->where([
+                                ['deliveryDate', '>=', $request->startDate],
+                                ['deliveryDate', '<=', $request->endDate]
+                            ])
+                            ->get();
+
+        return response()->json($feedsDelivery);
     }
 
     public function createUpdateFeedsDelivery(Request $request)

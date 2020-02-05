@@ -101,9 +101,32 @@ class ProductionController extends Controller
                                 ]);
         } else {
             abort(500, 'No active batch found for houseId: '.$houseId);
-        }
+        } 
+    }
 
-        
+     function getProductionReportsByBatchId($batchId) {
+        $batch = DB::table('batches')
+                        ->where('batches.id', $batchId)
+                        ->join('houses', 'houses.id', '=', 'batches.houseId')
+                        ->select('batches.id', 'batches.batch', 'batches.houseId', 'batches.startDate', 'batches.initialBirdBalance', 'batches.startAge', 'houses.name', 'houses.stockman')
+                        ->first();
+
+        if($batch != null) {
+            $productions = DB::table('productions')
+                        ->where('batchId', $batch->id)
+                        ->orderBy('productions.reportDate', 'ASC')
+                        ->get();
+
+            $batch->productions = $productions; 
+
+            return response()->json($batch, $this-> successStatus)
+                             ->withHeaders([
+                                'Pragma' => "no-cache",
+                                'Cache-Control' => 'no-cache, must-revalidate, no-store, max-age=0, private'
+                                ]);
+        } else {
+            abort(500, 'No batch found for batchId: '.$batchId);
+        } 
     }
 
     function createUpdateProductionReport(Request $request) {
@@ -137,5 +160,16 @@ class ProductionController extends Controller
         }
 
         return response()->json($production, $this-> successStatus);
+    }
+
+    function deleteProductionReport($id) {
+
+        DB::table('productions')->where('id', '=', $id)->delete();
+
+        return response()->json(['success'=>true])
+                         ->withHeaders([
+                            'Pragma' => "no-cache",
+                            'Cache-Control' => 'no-cache, must-revalidate, no-store, max-age=0, private'
+                            ]);;
     }
 }
