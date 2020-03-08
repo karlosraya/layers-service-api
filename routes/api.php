@@ -98,6 +98,7 @@ Route::group([
         Route::get('{date}', 'GradedEggsController@getGradedEggsByDate');
         Route::get('available/{date}', 'GradedEggsController@getAvailableByDate');
         Route::post('', 'GradedEggsController@createUpdateGradedEggs');
+        Route::post('history', 'GradedEggsController@getGradedEggsHistoryByDateRange');
     });
 });
 

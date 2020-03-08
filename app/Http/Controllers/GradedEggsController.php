@@ -155,4 +155,17 @@ class GradedEggsController extends Controller
 
         return response()->json(new GradedEggsResource($gradedEggs), $this-> successStatus);
     }
+    
+    public function getGradedEggsHistoryByDateRange(Request $request)
+    {
+        $gradedEggsReport = DB::table('graded_eggs')
+                            ->where([
+                                ['inputDate', '>=', $request->startDate],
+                                ['inputDate', '<=', $request->endDate]
+                            ])
+                            ->orderBy('inputDate', 'asc')
+                            ->get();
+
+        return response()->json($gradedEggsReport);
+    }
 }
