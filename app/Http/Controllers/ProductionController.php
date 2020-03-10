@@ -146,17 +146,28 @@ class ProductionController extends Controller
 
             return response()->json($production);
         } else {
-            $production = new Production;
-            $production->batchId = $request->input('batchId');
-            $production->houseId = $request->input('houseId');
-            $production->reportDate = $request->input('reportDate');
-            $production->feeds = $request->input('feeds');
-            $production->eggProduction = $request->input('eggProduction');
-            $production->cull = $request->input('cull');
-            $production->mortality = $request->input('mortality');
-            $production->lastInsertUpdateBy = $user->firstName.' '.$user->lastName;
-            $production->lastInsertUpdateTS = Carbon::now();
-            $production->save();
+            $existingEntry = DB::table('productions')->where([
+                ['reportDate', '=', $request->input('reportDate')],
+                ['houseId', '=', $request->input('houseId')],
+                ['batchId', '=', $request->input('batchId')]
+            ])->first();
+            
+            if($existingEntry == null) {
+                $production = new Production;
+                $production->batchId = $request->input('batchId');
+                $production->houseId = $request->input('houseId');
+                $production->reportDate = $request->input('reportDate');
+                $production->feeds = $request->input('feeds');
+                $production->eggProduction = $request->input('eggProduction');
+                $production->cull = $request->input('cull');
+                $production->mortality = $request->input('mortality');
+                $production->lastInsertUpdateBy = $user->firstName.' '.$user->lastName;
+                $production->lastInsertUpdateTS = Carbon::now();
+                $production->save(); 
+            } else {
+                abort(500, 'Duplicate data found. Please refresh the page and try again.');
+            }
+            
         }
 
         return response()->json($production, $this-> successStatus);
