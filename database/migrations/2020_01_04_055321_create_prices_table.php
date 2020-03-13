@@ -15,6 +15,7 @@ class CreatePricesTable extends Migration
     {
         Schema::create('prices', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('customerId');
             $table->float('pww')->nullable();
             $table->float('pw')->nullable();
             $table->float('pullets')->nullable();

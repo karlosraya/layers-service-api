@@ -14,9 +14,9 @@ class PricesController extends Controller
 {
     public $successStatus = 200;
 
-    public function getPrices()
+    public function getPricesByCustomerId($customerId)
     {
-        $prices = DB::table('prices')->orderBy('lastInsertUpdateTS', 'desc')->first();
+        $prices = DB::table('prices')->where('customerId', '=', $customerId)->first();
 
         if($prices != null) {
             return response()->json($prices, $this-> successStatus);
@@ -29,7 +29,13 @@ class PricesController extends Controller
     {
         $user = Auth::user(); 
 
-        $prices = new Prices;
+        if($request->id != null) {
+            $prices = Prices::findOrFail($request->id);
+        } else {
+            $prices = new Prices;
+        }
+        
+        $prices->customerId = $request->input('customerId');
         $prices->pww = $request->input('pww');
         $prices->pw = $request->input('pw');
         $prices->pullets = $request->input('pullets');

@@ -86,6 +86,7 @@ Route::group([
         Route::get('{date}', 'FeedsDeliveryController@getFeedsDeliveryByDate');
         Route::post('search', 'FeedsDeliveryController@getFeedsDeliveredByDateRange');
         Route::post('', 'FeedsDeliveryController@createUpdateFeedsDelivery');
+        Route::get('delete/{id}', 'FeedsDeliveryController@deleteFeedsDelivery');
     });
 });
 
@@ -108,7 +109,7 @@ Route::group([
     Route::group([
       'middleware' => 'auth:api'
     ], function() {
-        Route::get('', 'PricesController@getPrices');
+        Route::get('{customerId}', 'PricesController@getPricesByCustomerId');
         Route::post('', 'PricesController@updatePrices');
     });
 });
@@ -147,6 +148,3 @@ Route::group([
         Route::get('delete/{id}', 'InvoiceController@deleteInvoice');
     });
 });
-    
-
-    
