@@ -21,6 +21,7 @@ class CreateUserRolesTable extends Migration
                                   'lockData', 
                                   'viewFeedsDelivery', 
                                   'editFeedsDelivery', 
+                                  'deleteFeedsDelivery',
                                   'viewEggProduction', 
                                   'editEggProduction', 
                                   'deleteEggProduction', 

@@ -17,7 +17,8 @@ class FeedsDeliveryController extends Controller
     public function getFeedsDeliveryByDate($date)
     {
         if($date != null) {
-            $feedsDelivery = DB::table('feeds_deliveries')->where('deliveryDate', '=', $date)->first();
+            $feedsDelivery = new class{};
+            $feedsDelivery->deliveries = DB::table('feeds_deliveries')->where('deliveryDate', '=', $date)->get();
 
             $productions = DB::table('productions')->where('reportDate', '<=', $date);
 
@@ -25,9 +26,9 @@ class FeedsDeliveryController extends Controller
                 $feedsDelivery = new FeedsDelivery;
             } 
             
-            $feedsDelivery->totalConsumption = intval(DB::table('productions')->where('reportDate', '<', $date)->sum('feeds'));
+            $feedsDelivery->totalAvailable =  intval(DB::table('feeds_deliveries')->where('deliveryDate', '<', $date)->sum('delivery')) - 
+                                              intval(DB::table('productions')->where('reportDate', '<', $date)->sum('feeds'));
             $feedsDelivery->dailyConsumption = intval(DB::table('productions')->where('reportDate', '=', $date)->sum('feeds'));
-            $feedsDelivery->totalAvailable = DB::table('feeds_deliveries')->where('deliveryDate', '<', $date)->sum('delivery');
            
             return response()->json($feedsDelivery);
         } else {
@@ -67,5 +68,12 @@ class FeedsDeliveryController extends Controller
         $feedsDelivery->save();
 
         return response()->json(new FeedsDeliveryResource($feedsDelivery));
+    }
+    
+    function deleteFeedsDelivery($id) {
+        
+        DB::table('feeds_deliveries')->where('id', '=', $id)->delete();
+        
+        return response()->json(['success'=>true]);
     }
 }

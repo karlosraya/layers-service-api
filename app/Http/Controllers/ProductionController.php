@@ -181,6 +181,6 @@ class ProductionController extends Controller
                          ->withHeaders([
                             'Pragma' => "no-cache",
                             'Cache-Control' => 'no-cache, must-revalidate, no-store, max-age=0, private'
-                            ]);;
+                            ]);
     }
 }
