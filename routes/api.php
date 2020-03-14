@@ -148,3 +148,14 @@ Route::group([
         Route::get('delete/{id}', 'InvoiceController@deleteInvoice');
     });
 });
+    
+Route::group([
+    'prefix' => 'data-lock'
+], function () {
+    Route::group([
+        'middleware' => 'auth:api'
+    ], function() {
+        Route::get('', 'DataLockController@getLatestLockedDate');
+        Route::get('lock/{date}', 'DataLockController@lockDataByDate');
+    });
+});

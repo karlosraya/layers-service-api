@@ -64,7 +64,7 @@ class FeedsDeliveryController extends Controller
         $feedsDelivery->delivery = $request->input('delivery');
         $feedsDelivery->deliveryDate = $request->input('deliveryDate');
         $feedsDelivery->lastInsertUpdateBy = $user->firstName.' '.$user->lastName;
-        $feedsDelivery->lastInsertUpdateTS = Carbon::now();;
+        $feedsDelivery->lastInsertUpdateTS = Carbon::now();
         $feedsDelivery->save();
 
         return response()->json(new FeedsDeliveryResource($feedsDelivery));
