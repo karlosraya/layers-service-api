@@ -26,9 +26,9 @@ class FeedsDeliveryController extends Controller
                 $feedsDelivery = new FeedsDelivery;
             } 
             
-            $feedsDelivery->totalAvailable =  intval(DB::table('feeds_deliveries')->where('deliveryDate', '<', $date)->sum('delivery')) - 
-                                              intval(DB::table('productions')->where('reportDate', '<', $date)->sum('feeds'));
-            $feedsDelivery->dailyConsumption = intval(DB::table('productions')->where('reportDate', '=', $date)->sum('feeds'));
+            $feedsDelivery->totalAvailable =  floatval(DB::table('feeds_deliveries')->where('deliveryDate', '<', $date)->sum('delivery')) - 
+                                              floatval(DB::table('productions')->where('reportDate', '<', $date)->sum('feeds'));
+            $feedsDelivery->dailyConsumption = floatval(DB::table('productions')->where('reportDate', '=', $date)->sum('feeds'));
            
             return response()->json($feedsDelivery);
         } else {

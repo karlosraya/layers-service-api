@@ -18,7 +18,7 @@ class CreateProductionsTable extends Migration
             $table->bigInteger('batchId');
             $table->bigInteger('houseId');
             $table->date('reportDate');
-            $table->integer('feeds');
+            $table->double('feeds', 8, 2);
             $table->integer('eggProduction');
             $table->integer('cull')->nullable();
             $table->integer('mortality')->nullable();
