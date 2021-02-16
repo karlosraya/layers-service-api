@@ -139,6 +139,9 @@ Route::group([
 Route::group([
     'prefix' => 'invoice'
 ], function () {
+
+    Route::post('open', 'InvoiceController@getOpenInvoicesByDateRange');
+
     Route::group([
       'middleware' => 'auth:api'
     ], function() {
