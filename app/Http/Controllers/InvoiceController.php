@@ -111,16 +111,12 @@ class InvoiceController extends Controller
     }
 	
 	public function getOpenInvoicesByDateRange(Request $request) {
-        DB::connection()->enableQueryLog();
-
 		 $invoices = DB::table('invoices')
 						->selectRaw('*, total - IFNULL(amountPaid, 0) - IFNULL(discount, 0) AS openBalance')
 						->whereRaw('total - IFNULL(amountPaid, 0) - IFNULL(discount, 0) > 0 AND invoiceDate BETWEEN "'.$request->startDate.'" AND "'.$request->endDate.'"')
 						->orderByRaw('customerId ASC, invoiceDate ASC')
                         ->get();
-
-                        $queries = DB::getQueryLog();
-
+                        
         return response()->json($invoices);
 	}
 }
