@@ -139,9 +139,6 @@ Route::group([
 Route::group([
     'prefix' => 'invoice'
 ], function () {
-
-    Route::post('open', 'InvoiceController@getOpenInvoicesByDateRange');
-
     Route::group([
       'middleware' => 'auth:api'
     ], function() {
@@ -149,6 +146,7 @@ Route::group([
         Route::post('search', 'InvoiceController@getInvoicesByCustomerIdAndDateRange');
         Route::post('', 'InvoiceController@createUpdateInvoice');
         Route::get('delete/{id}', 'InvoiceController@deleteInvoice');
+        Route::post('open', 'InvoiceController@getOpenInvoicesByDateRange');
     });
 });
     
